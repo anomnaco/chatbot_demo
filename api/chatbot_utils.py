@@ -1,32 +1,26 @@
 from langchain.prompts import PromptTemplate
-
-from cassandra.cluster import Cluster
-from cassandra.auth import PlainTextAuthProvider
-from api.local_creds import *
-
+import json
+import requests
 from langchain.llms import OpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores.cassandra import Cassandra
+from local_creds import *
 
-#Astra db connection
-cloud_config= { 'secure_connect_bundle': secure_bundle_path , 'use_default_tempdir': True}
-auth_provider = PlainTextAuthProvider(client_id, client_secret)
-cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
-session = cluster.connect()
-
+request_url = f"https://{ASTRA_DB_ID}-{ASTRA_DB_REGION}.apps.astra.datastax.com/api/json/v1/{KEYSPACE_NAME}/{COLLECTION_NAME}"
+request_headers = { 'x-cassandra-token': app_token,  'Content-Type': 'application/json'}
 
 #langchain openai interface
 llm = OpenAI(openai_api_key=OPENAI_API_KEY)
 embedding_model = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY) 
 
-#langchain Cassandra vector store interface
-astraVectorStore = Cassandra( embedding=embedding_model, session=session, keyspace=db_keyspace, table_name=db_table)
 from operator import itemgetter
 def get_similar_docs(query, number):
     embedding = list(embedding_model.embed_query(query))
-    relevant_docs = astraVectorStore.similarity_search_with_score_id_by_vector(embedding, number)
-    docs_contents = map(itemgetter(0), relevant_docs)
-    docs_urls = map(itemgetter(2), relevant_docs)
+    payload = json.dumps({"find": {"sort": {"$vector": embedding},"options": {"limit": number}}})
+    relevant_docs = requests.request("POST", request_url, headers=request_headers, data=payload).json()['data']['documents']
+    #print(relevant_docs)
+    docs_contents = [row['answer'] for row in relevant_docs] 
+    docs_urls = [row['document_id'] for row in relevant_docs]
     return docs_contents, docs_urls
     
 #promt that is sent to openai using the response from the vector database and the users original query
@@ -50,3 +44,4 @@ def build_full_prompt(query):
 
 def send_to_openai(full_prompt):
     return llm.predict(full_prompt)
+

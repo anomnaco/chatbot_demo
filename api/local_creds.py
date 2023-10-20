@@ -4,4 +4,10 @@ client_secret = "SHtiOBZ3A6ZP0myWTYBFjhb4YMXh7c300mEDUZ.LdZBcBwd2fwZ6Ny_ABmZ2Opd
 secure_bundle_path = "api/secure-connect-astra-vectore-search.zip"
 db_keyspace = "vector_search_ai"
 db_table = "qadoc_openai"
-OPENAI_API_KEY="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"
+
+OPENAI_API_KEY="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"
+KEYSPACE_NAME = "vector_search_ai"
+COLLECTION_NAME = "qadoc_openai_json"
+ASTRA_DB_ID = "8292d441-dd1b-4c33-8431-e838ebdc04f7"
+ASTRA_DB_REGION="us-east1"
+ASTRA_DB_APPLICATION_TOKEN = "AstraCS:KXuJZAdHIQcGHoskWrESCvAL:aa72a675af124d40cd7808007ed2e3b7b22145d2cb525ac1f6b57db6ca44effc"
