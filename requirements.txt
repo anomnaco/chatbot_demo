@@ -1,7 +1,0 @@
-langchain
-cassandra-driver>=3.28.0
-fastapi==0.100.1
-uvicorn[standard]==0.23.2
-cassio
-openai
-tiktoken
