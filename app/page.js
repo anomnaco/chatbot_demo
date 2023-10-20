@@ -28,7 +28,7 @@ export default function Home() {
         inputRef.current.value = "";
         inputRef.current.focus();
         setMessages(prev => [...prev, { processing: true }]);
-        const res = await axios.post(`/api/chat`, {
+        const res = await axios.post(`${NEXT_PUBLIC_API_URL}/api/chat`, {
           prompt: question,
         });
         const reply = JSON.parse(res.data);

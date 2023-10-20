@@ -1,9 +1,0 @@
-INPUT_JSON = "scraped_results.json" # input data
-SCB_PATH = "secure-connect-astra-vectore-search.zip" # path of secure connect bundle
-TOKEN_ID = "lBBHBdxJXFUBSLdNdMDmHrOM"
-TOKEN_SECRET = "SHtiOBZ3A6ZP0myWTYBFjhb4YMXh7c300mEDUZ.LdZBcBwd2fwZ6Ny_ABmZ2OpdDm+ob-Lc0CuK5ZWCK2mAgxmzFl697TsO5as1.-JTaxyuE4J2aYai9CZSkW0unnH69"
-KEYSPACE_NAME = "vector_search_ai"
-COLLECTION_NAME = "qadoc_openai_json"
-ASTRA_DB_ID = "8292d441-dd1b-4c33-8431-e838ebdc04f7"
-ASTRA_DB_REGION="us-east1"
-ASTRA_DB_APPLICATION_TOKEN = "AstraCS:KXuJZAdHIQcGHoskWrESCvAL:aa72a675af124d40cd7808007ed2e3b7b22145d2cb525ac1f6b57db6ca44effc"

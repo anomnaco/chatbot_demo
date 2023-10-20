@@ -12,33 +12,17 @@ You can clone & deploy it to Vercel with one click:
 
 # Setup
 
-To install backend deps run the following command
-
-```
-cd backend
-pip install -r requirements.txt
-
-```
-
 To install frontend deps run the following command
 
 ```
-cd frontend
 npm install
 ```
 
 # Start Servers
-
-To start the backend server, in a terminal tab run the following
-
-```
-cd backend
-uvicorn main:app --reload
-```
+Create .env file from .env.example and replace NEXT_PUBLIC_API_URL with your chatbot backend endpoint in .env.
 
 To start the frontend in a new terminal run the following
 
 ```
-cd frontend
 npm run dev
 ```
