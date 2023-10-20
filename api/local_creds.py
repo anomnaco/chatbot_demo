@@ -3,5 +3,5 @@ app_token = "AstraCS:KXuJZAdHIQcGHoskWrESCvAL:aa72a675af124d40cd7808007ed2e3b7b2
 client_secret = "SHtiOBZ3A6ZP0myWTYBFjhb4YMXh7c300mEDUZ.LdZBcBwd2fwZ6Ny_ABmZ2OpdDm+ob-Lc0CuK5ZWCK2mAgxmzFl697TsO5as1.-JTaxyuE4J2aYai9CZSkW0unnH69"
 secure_bundle_path = "api/secure-connect-astra-vectore-search.zip"
 db_keyspace = "vector_search_ai"
-db_table = "qadoc"
-OPENAI_API_KEY="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"
+db_table = "qadoc_openai"
+OPENAI_API_KEY="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"

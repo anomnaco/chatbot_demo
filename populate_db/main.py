@@ -7,9 +7,14 @@ from constants import INPUT_JSON, SCB_PATH, TOKEN_ID, TOKEN_SECRET
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 from sentence_transformers import SentenceTransformer
+from langchain.embeddings import OpenAIEmbeddings
 
+import time
+import sys
+sys.path.append('../api')
+from local_creds import *
 #To do: add logger
-
+embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
 
 def get_input_data():
     scraped_results_file = INPUT_JSON
@@ -33,9 +38,7 @@ def connect_to_astra():
 
 
 def embed(text_to_embed):
-    model_name = "intfloat/multilingual-e5-small"
-    model = SentenceTransformer(model_name)
-    embedding = list(model.encode(text_to_embed))
+    embedding = list(embeddings.embed_query(text_to_embed))
     return embedding
 
 
@@ -56,8 +59,9 @@ def main():
             answer = q_and_a_data["answers"][i]
             text_to_embed = f"{question} {answer}"
             embedding = embed(text_to_embed)
+            time.sleep(5)
 
-            session.execute("""INSERT INTO vector_search_ai.qadoc
+            session.execute("""INSERT INTO vector_search_ai.qadoc_openai
                 (document_id, index_id, document, question, vector) VALUES (%s, %s, %s, %s, %s)""",
                 (document_id, question_id, answer, question, embedding))
 

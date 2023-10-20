@@ -1,15 +1,12 @@
 from langchain.prompts import PromptTemplate
-from langchain.embeddings import HuggingFaceEmbeddings
 
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 from api.local_creds import *
 
 from langchain.llms import OpenAI
+from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores.cassandra import Cassandra
-
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
 
 #Astra db connection
 cloud_config= { 'secure_connect_bundle': secure_bundle_path }
@@ -17,20 +14,16 @@ auth_provider = PlainTextAuthProvider(client_id, client_secret)
 cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
 session = cluster.connect()
 
-#Embedding model for vectorizing prompts
-model_name = "intfloat/multilingual-e5-small"
-embedding_model = HuggingFaceEmbeddings(model_name=model_name)
 
 #langchain openai interface
 llm = OpenAI(openai_api_key=OPENAI_API_KEY)
+embedding_model = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY) 
 
 #langchain Cassandra vector store interface
 astraVectorStore = Cassandra( embedding=embedding_model, session=session, keyspace=db_keyspace, table_name=db_table)
 from operator import itemgetter
 def get_similar_docs(query, number):
-    from sentence_transformers import SentenceTransformer
-    model = SentenceTransformer(model_name)
-    embedding = list(model.encode(query))
+    embedding = list(embedding_model.embed_query(query))
     relevant_docs = astraVectorStore.similarity_search_with_score_id_by_vector(embedding, number)
     docs_contents = map(itemgetter(0), relevant_docs)
     docs_urls = map(itemgetter(2), relevant_docs)
