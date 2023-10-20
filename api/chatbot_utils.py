@@ -9,7 +9,7 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores.cassandra import Cassandra
 
 #Astra db connection
-cloud_config= { 'secure_connect_bundle': secure_bundle_path }
+cloud_config= { 'secure_connect_bundle': secure_bundle_path , 'use_default_tempdir': false}
 auth_provider = PlainTextAuthProvider(client_id, client_secret)
 cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
 session = cluster.connect()
